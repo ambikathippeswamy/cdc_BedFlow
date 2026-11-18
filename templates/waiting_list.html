@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Waiting List | BedFlow{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+    <h1>Patient Waiting List</h1>
+    <p>Patients are displayed in the order in which they requested a bed.</p>
+</div>
+
+
+<div class="grid">
+
+    <div class="stat-card">
+        <h3>Total Waiting Patients</h3>
+        <div class="number">{{ waiting_list|length }}</div>
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <h2>Waiting Patients</h2>
+
+    {% if waiting_list %}
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Queue Position</th>
+                        <th>Patient ID</th>
+                        <th>Patient Name</th>
+                        <th>Age</th>
+                        <th>Phone</th>
+                        <th>Diagnosis</th>
+                        <th>Required Bed</th>
+                        <th>Requested At</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for patient in waiting_list %}
+
+                    <tr>
+
+                        <td>{{ loop.index }}</td>
+                        <td>{{ patient.login_id }}</td>
+                        <td>{{ patient.name }}</td>
+                        <td>{{ patient.age }}</td>
+                        <td>{{ patient.phone or '-' }}</td>
+                        <td>{{ patient.diagnosis }}</td>
+                        <td>{{ patient.bed_type }}</td>
+                        <td>{{ patient.requested_at }}</td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+            No patients are currently waiting for beds.
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

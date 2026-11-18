@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Admission | BedFlow{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+    <h1>Patient Admission</h1>
+    <p>Allocate an available hospital bed to a registered patient.</p>
+</div>
+
+
+<div class="card" style="max-width:700px;margin:auto;">
+
+    <h2>Admit Patient</h2>
+
+    <form method="POST">
+
+        <div class="form-group">
+
+            <label>Select Patient</label>
+
+            <select name="patient_id" required>
+
+                <option value="">Choose Patient</option>
+
+                {% for patient in patients %}
+
+                    <option value="{{ patient.id }}">
+                        {{ patient.name }} - {{ patient.login_id }}
+                        ({{ patient.required_bed_type }})
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Select Available Bed</label>
+
+            <select name="bed_id">
+
+                <option value="">
+                    Automatically select a suitable bed
+                </option>
+
+                {% for bed in beds %}
+
+                    <option value="{{ bed.id }}">
+                        {{ bed.ward_name }} -
+                        {{ bed.bed_number }} -
+                        {{ bed.bed_type }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+            <small>
+                Choose a bed matching the patient's required bed type.
+                If no suitable bed is available, the patient will be
+                added to the waiting list.
+            </small>
+
+        </div>
+
+
+        <button type="submit" class="btn" style="width:100%;">
+            Confirm Admission
+        </button>
+
+    </form>
+
+</div>
+
+
+<div class="card" style="margin-top:25px;">
+
+    <h2>Available Beds</h2>
+
+    {% if beds %}
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Ward</th>
+                        <th>Bed Number</th>
+                        <th>Bed Type</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for bed in beds %}
+
+                    <tr>
+                        <td>{{ bed.ward_name }}</td>
+                        <td>{{ bed.bed_number }}</td>
+                        <td>{{ bed.bed_type }}</td>
+                        <td>
+                            <span class="badge badge-success">
+                                Available
+                            </span>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+            No available beds at the moment.
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
